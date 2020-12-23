@@ -1,0 +1,11 @@
+name: Duel
+version: 1.0.0
+author: mogu
+main: com.DuelPlugin
+api-version: 1.16
+
+commands:
+  duel:
+    description: Duel another player!
+    usage: /duel [player]
+    aliases: [du]

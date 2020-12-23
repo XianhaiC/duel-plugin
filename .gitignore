@@ -1,0 +1,5 @@
+/lib
+*.jar
+*.class
+tags
+make.sh
