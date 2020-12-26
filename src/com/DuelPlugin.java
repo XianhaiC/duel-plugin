@@ -4,8 +4,11 @@ import java.sql.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.DBConnection;
+import com.commands.AddDBCommand;
 import com.commands.LeaderboardCommand;
 import com.commands.DuelCommand;
+import com.commands.DuelAcceptCommand;
+import com.commands.SaveCommand;
 import com.eventhandlers.DuelHandler;
 
 public class DuelPlugin extends JavaPlugin {
@@ -31,7 +34,10 @@ public class DuelPlugin extends JavaPlugin {
 
     // attach our command executors
     this.getCommand("leaderboard").setExecutor(new LeaderboardCommand(this));
+    this.getCommand("adddb").setExecutor(new AddDBCommand(this));
+    this.getCommand("saveinv").setExecutor(new SaveCommand(this));
     this.getCommand("duel").setExecutor(new DuelCommand(this));
+    this.getCommand("duelaccept").setExecutor(new DuelAcceptCommand(this));
 
     // attach our event listeners
     duelHandler = new DuelHandler(this);

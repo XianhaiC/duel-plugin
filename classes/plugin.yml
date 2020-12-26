@@ -10,7 +10,22 @@ commands:
     usage: /duel [player]
     aliases: [du]
 
+  duelaccept:
+    description: Accept another player's duel.
+    usage: /duelaccept
+    aliases: [da]
+
+  adddb:
+    description: "[DEBUG] Add a row to the database."
+    usage: /duel [player]
+    aliases: [du]
+
   leaderboard:
-    description: Display duel leaderboards.
+    description: "[DEBUG] Display duel leaderboards."
     usage: /leaderboard
     aliases: [lb]
+
+  saveinv:
+    description: "[DEBUG] Save and restore player inventory."
+    usage: /saveinv
+    aliases: [si]
