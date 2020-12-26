@@ -19,7 +19,7 @@ public class LeaderboardCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         // do whatever
         try {
-            Statement stmt = DuelPlugin.connection.createStatement();
+            Statement stmt = DuelPlugin.getDB().createStatement();
             ResultSet result = stmt.executeQuery("SELECT * FROM player;");
             sender.sendMessage("LEADERBOARD:");
             while (result.next()) {

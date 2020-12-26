@@ -1,57 +1,58 @@
 package com;
 
 import java.sql.*;
-import java.io.File;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.DBConnection;
 import com.commands.LeaderboardCommand;
 import com.commands.DuelCommand;
+import com.eventhandlers.DuelHandler;
 
 public class DuelPlugin extends JavaPlugin {
-  public static Connection connection;
+  private static DBConnection connection;
+  private static DuelHandler duelHandler;
 
   @Override
   public void onEnable() {
+    // create a connection to the db
+    connection = new DBConnection(this);
+
     try {
-      openConnection();
-      createDatabase();
-      getLogger().info("Successfully created player db!");
+      // open the connection and create the db if it doesn't exist
+      connection.openConnection();
+      connection.createDatabase();
+
+      getLogger().info("Successfully initialized database connection.");
+    } catch (SQLException e) {
+      e.printStackTrace();
     } catch (ClassNotFoundException e) {
       e.printStackTrace();
+    }
+
+    // attach our command executors
+    this.getCommand("leaderboard").setExecutor(new LeaderboardCommand(this));
+    this.getCommand("duel").setExecutor(new DuelCommand(this));
+
+    // attach our event listeners
+    duelHandler = new DuelHandler(this);
+  }
+
+  @Override
+  public void onDisable() {
+    try {
+      // open the connection and create the db if it doesn't exist
+      connection.closeConnection();
+      getLogger().info("Successfully closed database connection.");
     } catch (SQLException e) {
       e.printStackTrace();
     }
-
-    this.getCommand("leaderboard").setExecutor(new LeaderboardCommand(this));
-    this.getCommand("duel").setExecutor(new DuelCommand(this));
   }
 
-  public void openConnection() throws SQLException,
-                                      ClassNotFoundException {
-    if (connection != null && !connection.isClosed()) {
-      return;
-    }
-
-    // get the db file path
-    File dataFolder = getDataFolder();
-    if(!dataFolder.exists()) {
-      dataFolder.mkdir();
-    }
-    String dbPath = dataFolder.getAbsolutePath() + "/duel.db";
-
-    Class.forName("org.sqlite.JDBC");
-    connection = DriverManager.getConnection("jdbc:sqlite:" + dbPath);
+  public static Connection getDB() {
+    return connection.getConnection();
   }
 
-  public void createDatabase() throws SQLException {
-    Statement cmd = connection.createStatement();
-    String cmdContent =
-      "CREATE TABLE IF NOT EXISTS player " +
-      "(name TEXT NOT NULL, " +
-      " total_wins INT NOT NULL, " +
-      " total_duels INT NOT NULL, " +
-      " win_streak INT NOT NULL)";
-    cmd.executeUpdate(cmdContent);
-    cmd.close();
+  public static DuelHandler getDuelHandler() {
+    return duelHandler;
   }
 }
