@@ -1,9 +1,8 @@
 package com.eventhandlers;
 
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import com.DuelPlugin;
 
 public final class DuelEndHandler implements Listener {
 

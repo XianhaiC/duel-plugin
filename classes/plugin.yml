@@ -9,3 +9,8 @@ commands:
     description: Duel another player!
     usage: /duel [player]
     aliases: [du]
+
+  leaderboard:
+    description: Display duel leaderboards.
+    usage: /leaderboard
+    aliases: [lb]
