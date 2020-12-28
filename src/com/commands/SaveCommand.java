@@ -54,4 +54,46 @@ public class SaveCommand implements CommandExecutor {
 
     return true;
   }
+
+  private void updatePlayerScore(String name, boolean win) {
+    try {
+      Statement stmt = DuelPlugin.getDB().createStatement();
+      ResultSet result =
+        stmt.executeQuery("SELECT * FROM player WHERE name = " + name + ";");
+      stmt.close();
+
+      int totalWins, totalDuels, winStreak;
+
+      // set the current score if an entry already exists
+      if (result.next()) {
+        totalWins = result.getInt("total_wins");
+        totalDuels = result.getInt("total_duels");
+        winStreak = result.getInt("win_streak");
+      }
+      else {
+        totalWins = 0;
+        totalDuels = 0;
+        winStreak = 0;
+      }
+
+      // update scores
+      totalDuels += 1;
+      if (win) {
+        totalWins += 1;
+        winStreak += 1;
+      }
+      else {
+        winStreak = 0;
+      }
+
+      String stmtReplace = "REPLACE INTO " +
+        "player (name, total_wins, total_duels, win_streak) " +
+        "VALUES (" + name + ", " + totalWins + ", " + totalDuels + ", " + winStreak + ");";
+      stmt = DuelPlugin.getDB().createStatement();
+      stmt.executeUpdate(stmtReplace);
+      stmt.close();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 }
